@@ -117,7 +117,8 @@
     </div>
 
     <script>
-        const ws = new WebSocket("ws://" + window.location.host + "/ws/clinical-demo-99");
+        const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+        const ws = new WebSocket(protocol + "//" + window.location.host + "/ws/clinical-demo-99");
         const chat = document.getElementById('chat');
         const logs = document.getElementById('logs');
         const input = document.getElementById('userInput');
