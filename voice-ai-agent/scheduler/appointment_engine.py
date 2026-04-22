@@ -10,6 +10,30 @@ class AppointmentEngine:
         self.db = db
         # Simulating external database of booked slots for dynamic logic
         self.booked_slots = ["10 AM", "10:00 AM", "10:00"] 
+        
+    def find_best_hospitals(self, doctor: str, language: str = "English") -> tuple[bool, str, dict]:
+        start = time.time()
+        
+        # Simulated DB response of top hospitals
+        hospitals = ["Apollo Hospitals", "Fortis Healthcare", "Max Super Speciality", "Manipal Hospitals"]
+        
+        # Multilingual phrasing
+        msg_dict = {
+            "English": f"Here are the top hospitals for {doctor}: {', '.join(hospitals)}. Available slots are usually 10:00 AM or 2:00 PM. Where would you like to book?",
+            "Hindi": f"{doctor} के लिए शीर्ष अस्पताल हैं: {', '.join(hospitals)}। उपलब्ध समय 10:00 AM या 2:00 PM हैं। आप कहाँ बुक करना चाहेंगे?",
+            "Tamil": f"{doctor} க்கான சிறந்த மருத்துவமனைகள்: {', '.join(hospitals)}. கிடைக்கும் நேரம் 10:00 AM அல்லது 2:00 PM. நீங்கள் எங்கு முன்பதிவு செய்ய விரும்புகிறீர்கள்?"
+        }
+        
+        lat = time.time() - start
+        response_text = msg_dict.get(language, msg_dict["English"])
+        
+        return True, response_text, {
+            "type": "tool", 
+            "name": "find_best_hospitals", 
+            "status": "success", 
+            "hospitals": hospitals,
+            "latency": f"{lat*1000:.2f}ms"
+        }
 
     def check_availability(self, doctor: str, date: str, time_req: str, language: str = "English") -> tuple[bool, str, dict]:
         start = time.time()

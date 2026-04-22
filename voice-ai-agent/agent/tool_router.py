@@ -53,15 +53,24 @@ class ToolRouter:
                 })
                 req.doctor = cached_doctor  # auto-fill exactly what they last spoke about!
 
-        # Auto-pick time if missing
-        if req.intent == "book" and req.date and not req.time:
-            req.time = "10:00 AM"
+        # Intercept missing hospital info vs auto-picking time
+        is_missing_hospital = req.intent == "book" and not req.hospital
+
+        if req.intent == "book" and req.date and req.hospital and not req.time:
+            req.time = "10:00 AM"  # Auto-pick only if hospital is already sorted
 
         try:
             if req.intent == "book":
-                # Realism Step 1: Check Availability
-                avail, msg, t_log_1 = engine.check_availability(req.doctor, req.date, req.time, language)
-                tool_logs.append(t_log_1)
+                if is_missing_hospital:
+                    # Provide options instead of instant booking
+                    success, msg, t_log = engine.find_best_hospitals(req.doctor, language)
+                    response_msg = msg
+                    action = "provided_hospital_options"
+                    tool_logs.append(t_log)
+                else:
+                    # Realism Step 1: Check Availability
+                    avail, msg, t_log_1 = engine.check_availability(req.doctor, req.date, req.time, language)
+                    tool_logs.append(t_log_1)
                 
                 if avail:
                     # Realism Step 2: Slot selected

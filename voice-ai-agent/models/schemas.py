@@ -4,6 +4,7 @@ from typing import Optional, List, Dict, Any
 class AppointmentRequest(BaseModel):
     intent: str = Field(description="The generic intent, e.g., 'book', 'reschedule', 'cancel', 'check_availability', 'unknown'")
     doctor: Optional[str] = Field(None, description="Type of doctor, e.g., 'cardiologist', 'dentist'")
+    hospital: Optional[str] = None
     date: Optional[str] = Field(None, description="Requested date")
     time: Optional[str] = Field(None, description="Requested time")
     appointment_id: Optional[int] = Field(None, description="Required for reschedule or cancel")

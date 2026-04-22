@@ -44,6 +44,18 @@ class ReasoningAgent:
         elif any(k in text_lower for k in doctor_keywords):
             doctor = "doctor"
             
+            
+        # Hospital Extraction
+        hospital = None
+        if "apollo" in text_lower:
+            hospital = "Apollo Hospitals"
+        elif "fortis" in text_lower:
+            hospital = "Fortis Healthcare"
+        elif "max" in text_lower:
+            hospital = "Max Super Speciality"
+        elif "manipal" in text_lower:
+            hospital = "Manipal Hospitals"
+            
         # Date Extraction via Regex (e.g. 28th april, tomorrow)
         if "tomorrow" in text_lower or "कल" in text_lower or "நாளை" in text_lower:
             date = "tomorrow"
@@ -67,6 +79,7 @@ class ReasoningAgent:
         result = {
             "intent": intent,
             "doctor": doctor,
+            "hospital": hospital,
             "date": date,
             "time": time_req,
             "appointment_id": app_id
