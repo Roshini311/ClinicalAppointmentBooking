@@ -72,24 +72,24 @@ class ToolRouter:
                     avail, msg, t_log_1 = engine.check_availability(req.doctor, req.date, req.time, language)
                     tool_logs.append(t_log_1)
                 
-                if avail:
-                    # Realism Step 2: Slot selected
-                    tool_logs.append({
-                        "type": "tool",
-                        "name": "slot_selection",
-                        "status": "success",
-                        "slot": req.time,
-                        "latency": "2.40ms"
-                    })
-                    
-                    # Realism Step 3: Book Appointment
-                    _, book_msg, t_log_2 = engine.book_appointment(user_id, req.doctor, req.date, req.time, language)
-                    tool_logs.append(t_log_2)
-                    response_msg = book_msg
-                    action = "booked"
-                else:
-                    response_msg = msg
-                    action = "conflict"
+                    if avail:
+                        # Realism Step 2: Slot selected
+                        tool_logs.append({
+                            "type": "tool",
+                            "name": "slot_selection",
+                            "status": "success",
+                            "slot": req.time,
+                            "latency": "2.40ms"
+                        })
+                        
+                        # Realism Step 3: Book Appointment
+                        _, book_msg, t_log_2 = engine.book_appointment(user_id, req.doctor, req.date, req.time, language)
+                        tool_logs.append(t_log_2)
+                        response_msg = book_msg
+                        action = "booked"
+                    else:
+                        response_msg = msg
+                        action = "conflict"
                     
             elif req.intent == "cancel":
                 if req.appointment_id:
